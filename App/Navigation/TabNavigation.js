@@ -14,7 +14,7 @@ import { Colors, width } from '../Themes/Theme'
 
 // Screens
 import DashboardScreen from '../Containers/Tabs/Dashboard'
-import RepositoryDetail from '../Containers/Tabs/RepositoryDetail'
+import Videos from '../Containers/Tabs/Videos'
 
 // Icons
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
@@ -26,8 +26,8 @@ const DashboardStack = StackNavigator(
     DashboardScreen: {
       screen: DashboardScreen
     },
-    RepositoryDetail: {
-      screen: RepositoryDetail
+    Videos: {
+      screen: Videos
     }
   },
   {
@@ -45,6 +45,7 @@ const Tabs = TabNavigator(
     Dashboard: {
       screen: DashboardStack,
       navigationOptions: {
+        tabBarVisible: false,
         tabBarIcon: ({ focused, tintColor }) =>
           focused ? (
             <MaterialCommunityIcons name={'view-list'} size={30} color={tintColor}/>

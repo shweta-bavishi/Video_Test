@@ -13,5 +13,4 @@ const RootReducer = persistCombineReducers(config, {
   nav: Nav,
   auth: Auth
 })
-
 export default RootReducer

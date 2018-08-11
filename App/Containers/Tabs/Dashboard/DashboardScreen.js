@@ -7,6 +7,8 @@ import {
   StyleSheet
 } from "react-native";
 
+import axios from 'axios';
+import Orientation from 'react-native-orientation';
 
 //CommonItems
 import { Card, CardSection } from '../../../Common';
@@ -31,51 +33,10 @@ const ScreenHeaderNameWrapper = styled.View`
   justify-content: space-between
   padding-top: 5%;
 `;
-var VIDEO_LIST = [];
-const VIDEO_LIST1 = [
-  {
-              "title": "video small",
-              "thumbnail_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
-              "video_url": "https://www.w3schools.com/htmL/mov_bbb.mp4"
-          },
-          {
-              "title": "video medium",
-              "thumbnail_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg",
-              "video_url": "http://techslides.com/demos/sample-videos/small.mp4"
-          },
-          {
-              "title": "video medium & long",
-              "thumbnail_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerMeltdowns.jpg",
-              "video_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4"
-          },
-          {
-              "title": "video big",
-              "thumbnail_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg",
-              "video_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
-          },
-          {
-              "title": "video small",
-              "thumbnail_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
-              "video_url": "https://www.w3schools.com/htmL/mov_bbb.mp4"
-          },
-          {
-              "title": "video medium",
-              "thumbnail_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg",
-              "video_url": "http://techslides.com/demos/sample-videos/small.mp4"
-          },
-          {
-              "title": "video medium & long",
-              "thumbnail_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerMeltdowns.jpg",
-              "video_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4"
-          },
-          {
-              "title": "video big",
-              "thumbnail_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg",
-              "video_url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
-          }
-];
 
 class DashboardScreen extends Component {
+
+  state = { VIDEO_LIST: [] }
 
   getList = async () => {
       const json = await UserApi.getList();
@@ -84,35 +45,31 @@ class DashboardScreen extends Component {
       } else if (json.error) {
         console.log("Error")
       } else {
-        return json.videos;
+        this.setState({ VIDEO_LIST: json.data.videos })
   };
 }
 
-  componentDidMount(){
-    VIDEO_LIST = this.getList();
-    console.log(VIDEO_LIST);
+  async componentDidMount(){
+    this.getList();
 }
-  _navigate = data => {
-    this.props.navigation.navigate(data, { data: data });
-  };
 
   render() {
     return (
       <ScrollView>
         <ScreenWrapper style={{marginTop:10}}>
           <ScreenPadder>
-            {VIDEO_LIST.map((data, index) => {
-              return (
-                <ListCircleIcon
-                  key={index}
-                  name={data.title}
-                  description={data.thumbnail_url}
-                  onPress={() => {
-                    this._navigate(data.video_url);
-                  }}
-                />
-              );
-            })}
+          {this.state.VIDEO_LIST.map((data, index) => {
+            return (
+              <ListCircleIcon
+                key={index}
+                name={data.title}
+                description={data.thumbnail_url}
+                onPress={() => {
+                  this.props.navigation.navigate("Videos", { data });
+                }}
+              />
+            );
+          })}
           </ScreenPadder>
         </ScreenWrapper>
       </ScrollView>
@@ -121,16 +78,3 @@ class DashboardScreen extends Component {
 }
 
 export default DashboardScreen;
-
-const styles = StyleSheet.create({
-  blockStyle:{
-    paddingBottom: 50,
-    borderBottomWidth: 0,
-    width:(Dimensions.get('window').width/2)-20,
-    height:Dimensions.get('window').height/4,
-    padding:15
-  },
-  columnStyle:{
-    borderBottomWidth: 0,
-  }
-});

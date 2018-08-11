@@ -12,4 +12,11 @@ public class MainActivity extends ReactActivity {
     protected String getMainComponentName() {
         return "Video_Test";
     }
+    @Override
+      public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Intent intent = new Intent("onConfigurationChanged");
+        intent.putExtra("newConfig", newConfig);
+        this.sendBroadcast(intent);
+    }
 }
